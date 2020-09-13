@@ -10,4 +10,4 @@ make serve
 make help
 ```
 
-localhost:7654
+http://localhost:7654 にアクセス
