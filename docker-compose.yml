@@ -1,0 +1,33 @@
+version: "3"
+services:
+  sinatra:
+    build: .
+    container_name: "sinatra"
+    command: /bin/sh -c "rm -f /app/tmp/pids/server.pid && ruby app.rb -p 7654 -o 0.0.0.0"
+    volumes:
+      - .:/app
+    ports:
+      - 7654:7654
+    depends_on:
+      - postgres
+    tty: true
+    stdin_open: true
+    environment:
+      DATABASE_HOST: postgres
+      DATABASE_USERNAME: postgres
+      DATABASE_PASSWORD: postgres
+      DATABASE_PORT: 5432
+  postgres:
+    image: postgres:10-alpine
+    container_name: "postgres"
+    ports:
+      - 8888:5432
+    environment:
+      POSTGRES_DB: myapp
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - ./myapp.sql:/myapp.sql
+      - db-volume:/var/lib/postgresql/data
+volumes:
+  db-volume:

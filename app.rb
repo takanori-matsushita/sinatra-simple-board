@@ -10,16 +10,16 @@ enable :sessions
 
 # データベースへの接続設定
 client = PG::connect(
-  :host => "localhost",
-  :user => ENV.fetch("USER", "taka"),
-  :password => '',
+  :host => "postgres",
+  :user => ENV.fetch("DB_USER", "postgres"),
+  :password => ENV.fetch("DB_PASSWORD", "postgres"),
   :dbname => "myapp"
 )
 
 # 投稿リスト(トップページ)
 get '/' do
   @message = session.delete :message if session[:message]  # session[:message]に値が代入されている場合、セッションメッセージ@messageへ代入し、session[:message]を削除する
-  @posts = client.exec_params("select  posts.id, posts.title, posts.content, posts.post_img, users.name from posts inner join users on users.id = posts.user_id").to_a
+  @posts = client.exec_params("select posts.id, posts.title, posts.content, posts.post_img, users.name from posts inner join users on users.id = posts.user_id").to_a
   return erb :top
 end
 
@@ -98,7 +98,7 @@ get '/mypage' do
     redirect '/login'  # ログインページへリダイレクトする# ログインページへリダイレクトする
   end
   @message = session.delete :message if session[:message] # session[:message]に値が代入されている場合、セッションメッセージ@messageへ代入し、session[:message]を削除する
-  @posts = client.exec_params("select  posts.id, posts.title, posts.content, posts.post_img, users.name from posts inner join users on users.id = posts.user_id").to_a
+  @posts = client.exec_params("select posts.id, posts.title, posts.content, posts.post_img, users.name from posts inner join users on users.id = posts.user_id").to_a
   return erb :mypage
 end
 
