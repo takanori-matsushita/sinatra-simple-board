@@ -1,0 +1,3 @@
+public/images/*
+!public/images/no-image.gif
+!public/images/no-image.png

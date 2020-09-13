@@ -1,0 +1,23 @@
+<h2>投稿一覧</h2>
+<div class="row">
+  <% if @posts.empty? %>
+  <p>投稿がありません</p>
+  <% else %> <% @posts.each do | post | %>
+  <div class="col-sm-12 col-md-6 col-xl-4">
+    <div class="card my-3">
+      <% if post['image'] %>
+      <img src="/images/<%= post['image'] %>" class="card-img-top image-fit" />
+      <% else %>
+      <img src="/images/no-image.png" class="card-img-top image-fit border" />
+      <% end %>
+      <div class="card-body">
+        <h5 class="card-title"><%= post["title"] %></h5>
+        <div class="d-flex justify-content-between align-items-center">
+          <p>投稿者: <%= post["name"] %></p>
+          <a href="/post/<%= post['id'] %>" class="btn btn-info">詳細</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <% end %> <% end %>
+</div>

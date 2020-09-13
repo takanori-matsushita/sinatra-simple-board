@@ -1,0 +1,42 @@
+<div class="d-flex justify-content-between align-items-center">
+  <h2 class="mb-5">投稿詳細</h2>
+  <% if session[:user] %> <% if @post['user_id'] == session[:user]['id'] %>
+  <div class="d-flex">
+    <a href="/post/<%= @post['id'] %>/edit" class="btn btn-primary mr-3"
+      >編集</a
+    >
+    <form action="/post/<%= @post['id'] %>" method="POST">
+      <input type="hidden" name="_method" value="DELETE" />
+      <button
+        type="submit"
+        class="btn btn-danger"
+        onclick="return window.confirm('本当に削除しますか？')"
+      >
+        削除
+      </button>
+    </form>
+  </div>
+  <% end %> <% end %>
+</div>
+<div class="media">
+  <div class="d-flex flex-column">
+    <% if @post['image'] %>
+    <img
+      src="/images/<%= @post['image'] %>"
+      class="card-img-top image-fit"
+      style="max-width: 400px"
+    />
+    <% else %>
+    <img
+      src="/images/no-image.png"
+      class="card-img-top image-fit border"
+      style="max-width: 400px"
+    />
+    <% end %>
+    <p class="pt-3 text-center">投稿者: <%= @post['name'] %></p>
+  </div>
+  <div class="media-body ml-3">
+    <h5 class="mt-0"><%= @post['title'] %></h5>
+    <%= @post['content'] %>
+  </div>
+</div>

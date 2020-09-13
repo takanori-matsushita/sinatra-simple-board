@@ -1,0 +1,30 @@
+<div class="row bg-light pb-5">
+  <div class="col-6 offset-3 pt-5">
+    <h2 class="mb-5">ログイン</h2>
+    <form action="/login" method="POST">
+      <div class="form-group">
+        <label for="email">メールアドレス</label>
+        <input
+          type="email"
+          class="form-control"
+          id="email"
+          aria-describedby="emailHelp"
+          name="email"
+        />
+      </div>
+      <div class="form-group">
+        <label for="password">パスワード</label>
+        <input
+          type="password"
+          class="form-control"
+          id="password"
+          name="password"
+        />
+      </div>
+      <div class="text-center">
+        <button type="submit" class="btn btn-success mr-5">ログイン</button>
+        <a href="/register" class="btn btn-info">新規登録はこちら</a>
+      </div>
+    </form>
+  </div>
+</div>

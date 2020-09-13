@@ -1,0 +1,50 @@
+<div class="row bg-light pb-5">
+  <div class="col-6 offset-3 pt-5">
+    <h2 class="mb-5">新規登録</h2>
+    <form action="/register" method="POST">
+      <div class="form-group">
+        <label for="name">
+          名前<span class="badge badge-danger">必須</span>
+        </label>
+        <input type="text" class="form-control" id="name" name="name" />
+      </div>
+      <div class="form-group">
+        <label for="email">
+          メールアドレス<span class="badge badge-danger">必須</span>
+        </label>
+        <input
+          type="email"
+          class="form-control"
+          id="email"
+          aria-describedby="emailHelp"
+          name="email"
+        />
+      </div>
+      <div class="form-group">
+        <label for="password">
+          パスワード<span class="badge badge-danger">必須</span>
+        </label>
+        <input
+          type="password"
+          class="form-control"
+          id="password"
+          name="password"
+        />
+      </div>
+      <div class="form-group">
+        <label for="password_confirmation">
+          パスワード(確認用)<span class="badge badge-danger">必須</span>
+        </label>
+        <input
+          type="password"
+          class="form-control"
+          id="password_confirmation"
+          name="password_confirmation"
+        />
+      </div>
+      <div class="text-center">
+        <button type="submit" class="btn btn-info mr-5">新規登録</button>
+      </div>
+    </form>
+  </div>
+</div>

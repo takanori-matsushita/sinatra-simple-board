@@ -1,0 +1,6 @@
+<% @posts.each do | post | %>
+<strong><%= post["title"] %></strong>
+<p><%= post["content"] %></p>
+<img src="/images/<%= post["image"] %>" alt="" />
+<hr />
+<% end %>

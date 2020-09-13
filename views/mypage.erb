@@ -1,0 +1,106 @@
+<div class="row">
+  <div class="col-sm-12 col-md-4 offset-sm">
+    <h2 class="mb-3">登録情報変更</h2>
+    <form action="/mypage" method="POST" enctype="multipart/form-data">
+      <input type="hidden" name="_method" value="PUT" />
+      <div class="form-group">
+        <label for="name">名前</label>
+        <input
+          type="text"
+          class="form-control"
+          id="name"
+          name="name"
+          value="<%= session[:user]['name'] %>"
+        />
+      </div>
+      <div class="form-group">
+        <label for="email">メールアドレス</label>
+        <input
+          type="email"
+          class="form-control"
+          id="email"
+          aria-describedby="emailHelp"
+          name="email"
+          value="<%= session[:user]['email'] %>"
+        />
+      </div>
+      <div class="form-group">
+        <label for="password">パスワード</label>
+        <input
+          type="password"
+          class="form-control"
+          id="password"
+          name="password"
+        />
+      </div>
+      <div class="form-group">
+        <label for="password_confirmation">パスワード(確認用)</label>
+        <input
+          type="password"
+          class="form-control"
+          id="password_confirmation"
+          name="password_confirmation"
+        />
+      </div>
+      <div class="form-group">
+        <label for="profile_img">画像</label>
+        <input
+          type="file"
+          name="img"
+          class="form-control-file"
+          id="profile_img"
+        />
+      </div>
+      <button type="submit" class="btn btn-primary">変更</button>
+    </form>
+    <div class="mx-auto text-center pt-5">
+      <% if session[:user]["profile_img"] %>
+      <img
+        src="/images/<%= session[:user]['profile_img'] %>"
+        class="img-fluid circle rounded-circle"
+      />
+      <% else %>
+      <img
+        class="img-fluid circle rounded-circle"
+        src="/images/no-image.gif"
+        alt="no-image"
+      />
+      <% end %>
+      <p class="lead"><%= session[:user]["name"] %></p>
+    </div>
+  </div>
+  <div class="col-sm-12 col-md-8">
+    <div class="d-flex justify-content-between align-items-center">
+      <h2>投稿一覧</h2>
+      <a href="/posts/new" class="btn btn-primary">新規投稿</a>
+    </div>
+    <div class="row">
+      <% if @posts.empty? %>
+      <p>投稿がありません</p>
+      <% else %> <% @posts.each do | post | %>
+      <div class="col-sm-12 col-md-6 col-xl-4">
+        <div class="card my-3">
+          <% if post['image'] %>
+          <img
+            src="/images/<%= post['image'] %>"
+            class="card-img-top image-fit"
+          />
+          <% else %>
+          <img
+            src="/images/no-image.png"
+            class="card-img-top image-fit border"
+          />
+          <% end %>
+          <div class="card-body">
+            <h5 class="card-title"><%= post["title"] %></h5>
+            <div class="d-flex justify-content-between align-items-center">
+              <p>投稿者: <%= post["name"] %></p>
+              <a href="/post/<%= post['id'] %>" class="btn btn-info">詳細</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <% end %> <% end %>
+    </div>
+  </div>
+</div>
