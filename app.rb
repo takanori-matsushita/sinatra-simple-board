@@ -16,17 +16,20 @@ client = PG::connect(
   :dbname => "myapp"
 )
 
-# 投稿リスト
+# 投稿リスト(トップページ)
 get '/' do
   @message = session.delete :message if session[:message]  # session[:message]に値が代入されている場合、セッションメッセージ@messageへ代入し、session[:message]を削除する
   @posts = client.exec_params("select  posts.id, posts.title, posts.content, posts.post_img, users.name from posts inner join users on users.id = posts.user_id").to_a
   return erb :top
 end
 
+# このページについて
 get '/about' do
   return erb :about
 end
 
+########## usersテーブルに関連する処理 ##########
+# 新規登録ページ
 get '/register' do
   if session[:user] # ログイン済みだった場合
     session[:message] = { key: 'warning', value: 'すでにログインしています' } # フラッシュメッセージを代入
@@ -36,6 +39,7 @@ get '/register' do
   return erb :register
 end
 
+# 新規登録の処理
 post '/register' do
   name = params[:name]
   email = params[:email]
@@ -63,6 +67,7 @@ post '/register' do
   return redirect '/mypage' # マイページへリダイレクトする
 end
 
+# ログインページ
 get '/login' do
   if session[:user] # ログイン済みの場合
     session[:message] = { key: 'warning', value: 'すでにログインしています' } # フラッシュメッセージを代入
@@ -72,6 +77,7 @@ get '/login' do
   return erb :login
 end
 
+# ログインの処理
 post '/login' do
   email = params[:email]
   password = Digest::SHA512.hexdigest(params[:password]) # パスワードを暗号化し、passwordに代入
@@ -85,6 +91,7 @@ post '/login' do
   return redirect '/login'  # ログインページへリダイレクトする# ログインページへリダイレクトする
 end
 
+# マイページ
 get '/mypage' do
   if session[:user].nil? # ログインしていない場合 # ログインしていない場合
     session[:message] = { key: 'danger', value: 'ログインしてください' } # フラッシュメッセージを代入
@@ -95,6 +102,7 @@ get '/mypage' do
   return erb :mypage
 end
 
+# ユーザー情報の更新処理
 put '/mypage' do
   if session[:user].nil? # ログインしていない場合 # ログインしていない場合
     session[:message] = { key: 'danger', value: 'ログインしてください' } # フラッシュメッセージを代入
@@ -141,6 +149,7 @@ put '/mypage' do
   end
 end
 
+# ログアウトの処理
 delete '/logout' do
   if session[:user].nil? # ログインしていない場合
     session[:message] = { key: 'danger', value: 'ログインしてください' } # フラッシュメッセージを代入
@@ -150,13 +159,17 @@ delete '/logout' do
   session[:message] = { key: 'danger', value: 'ログアウトしました' } # フラッシュメッセージを代入
   redirect '/login'
 end
+########## ユーザー(usersテーブル)に関連する処理ここまで ##########
 
+########## 投稿(postsテーブル)に関連する処理 ##########
+# 投稿詳細ページ
 get '/post/:id' do
   @message = session.delete :message if session[:message] # session[:message]に値が代入されている場合、セッションメッセージ@messageへ代入し、session[:message]を削除する
   @post = client.exec_params("select posts.id, posts.title, posts.content, posts.post_img, users.name from posts inner join users on users.id = posts.user_id").to_a.first
   return erb :show_post
 end
 
+# 新規投稿ページ
 get '/posts/new' do
   @message = session.delete :message if session[:message] # session[:message]に値が代入されている場合、セッションメッセージ@messageへ代入し、session[:message]を削除する
   if session[:user].nil? # ログインしていない場合
@@ -166,6 +179,7 @@ get '/posts/new' do
   return erb :new_posts
 end
 
+# 新規投稿の処理
 post '/posts' do
   if session[:user].nil? # ログインしていない場合
     session[:message] = { key: 'danger', value: 'ログインしてください' } # フラッシュメッセージを代入
@@ -189,6 +203,7 @@ post '/posts' do
   return redirect "/post/#{post['id']}"
 end
 
+# 投稿の編集ページ
 get '/post/:id/edit' do
   if session[:user].nil? # ログインしていない場合
     session[:message] = { key: 'danger', value: 'ログインしてください' } # フラッシュメッセージを代入
@@ -202,6 +217,7 @@ get '/post/:id/edit' do
   return erb :edit_post
 end
 
+# 投稿の更新処理
 put '/post/:id' do
   if session[:user].nil? # ログインしていない場合
     session[:message] = { key: 'danger', value: 'ログインしてください' } # フラッシュメッセージを代入
@@ -226,6 +242,7 @@ put '/post/:id' do
   return redirect "/posts/#{post['id']}"
 end
 
+# 投稿の削除処理
 delete '/post/:id' do
   if session[:user].nil? # ログインしていない場合
     session[:message] = { key: 'danger', value: 'ログインしてください' } # フラッシュメッセージを代入
@@ -240,6 +257,7 @@ delete '/post/:id' do
   session[:message] = { key: 'danger', value: '投稿を削除しました' } # フラッシュメッセージを代入
   return redirect '/'
 end
+########## 投稿(postsテーブル)に関連する処理ここまで ##########
 
 # 上記記載のルーティングに一致しなかった場合
 not_found do
